@@ -138,7 +138,7 @@ class wechat_helper {
     /**
      * Check wechat to see if this order has been paid.
      *
-     * @param $config
+     * @param \stdClass $config
      * @param \stdClass $order
      * @throws \Exception
      * @return boolean
@@ -204,7 +204,7 @@ class wechat_helper {
     /**
      * Generate a unique order id based on timecreated and order->id field.
      *
-     * @param \stdClass $order - the order record from paygw_alipay table.
+     * @param \stdClass $order - the order record from paygw_wechat table.
      * @return string
      */
     protected static function get_orderid($order) {

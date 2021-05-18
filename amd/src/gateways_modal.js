@@ -69,7 +69,7 @@ export const process = (component, paymentArea, itemId, description) => {
                 return showModal(wechatconfig.wechatform)
                     .then(() => {
                         let max = 10;
-                        for (var i=0; i < max; i++) {
+                        for (var i = 0; i < max; i++) {
                             Repository.getState(component, paymentArea, itemId, description)
                                 .then(westate => {
                                     if (westate.status) {

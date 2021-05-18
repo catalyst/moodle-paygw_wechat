@@ -17,11 +17,7 @@
 /**
  * Redirects after succesful payment.
  *
- * This script waits for Payment notification from Alipay,
- * then double checks that data by sending it back to Alipay.
- * If Alipay verifies this then it flags the payment as paid.
- *
- * @package    paygw_alipay
+ * @package    paygw_wechat
  * @copyright 2021 Catalyst IT
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +26,6 @@ use core_payment\helper;
 
 require_once(__DIR__ . '/../../../config.php');
 
-// Get Moodle order id from Alipay response.
 $component = required_param('component', PARAM_ALPHANUMEXT);
 $paymentarea = required_param('paymentarea', PARAM_ALPHANUMEXT);
 $itemid = required_param('itemid', PARAM_ALPHANUMEXT);
