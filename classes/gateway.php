@@ -50,8 +50,26 @@ class gateway extends \core_payment\gateway {
      * @param \core_payment\form\account_gateway $form
      */
     public static function add_configuration_to_gateway_form(\core_payment\form\account_gateway $form): void {
+        global $CFG;
         $mform = $form->get_mform();
+        // Check to make sure SDK files exist.
+        $hassdk = true;
+        $requiredfiles = ['WxPay.Api.php',
+                          'WxPay.Config.Interface.php',
+                          'WxPay.Data.php',
+                          'WxPay.Exception.php',
+                          'WxPay.Notify.php'];
 
+        foreach ($requiredfiles as $file) {
+            if (!file_exists($CFG->dirroot.'/payment/gateway/wechat/.extlib/wechatsdk/'.$file)) {
+                $hassdk = false;
+            }
+        }
+        if (!$hassdk) {
+            \core\notification::add(get_string('sdknotinstalled', 'paygw_wechat'),
+                \core\output\notification::NOTIFY_ERROR);
+            return;
+        }
         $mform->addElement('text', 'appid', get_string('appid', 'paygw_wechat'));
         $mform->setType('appid', PARAM_TEXT);
         $mform->addHelpButton('appid', 'appid', 'paygw_wechat');
