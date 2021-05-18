@@ -128,7 +128,7 @@ class wechat_helper {
             $imagedata = 'data:image/png;base64,' . base64_encode($qrcode->getBarcodePngData(6, 6));
             return html_writer::img($imagedata, '');
         } catch (\Exception $e) {
-            // TODO EXCEPTION;
+            // TODO EXCEPTION.
             return get_string('errorgeneratingcode', 'paygw_wechat');
         }
 
@@ -158,7 +158,7 @@ class wechat_helper {
                 return true;
             }
         } catch (\Exception $e) {
-            // TODO EXCEPTION;
+            // TODO EXCEPTION.
             return false;
         }
 

@@ -53,7 +53,7 @@ export const getForm = (component, paymentArea, itemId, description) => {
  * @param {string} paymentArea The area of the component that the itemId belongs to
  * @param {number} itemId An internal identifier that is used by the component
  * @param {string} description The description of the payment.
- * @returns boolean
+ * @returns {Promise<{status: boolean}>}
  */
 export const getState = (component, paymentArea, itemId, description) => {
     const request = {

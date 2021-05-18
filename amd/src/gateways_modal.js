@@ -61,6 +61,7 @@ const showModal = async(wechatscript) => {
  * @returns {Promise<string>}
  */
 export const process = (component, paymentArea, itemId, description) => {
+
     // This is a hack to get around linting. Promises are usually required to return
     // But we are hacking the process js to inject a redirect so need to wait for that to occur.
     return showPlaceholderModal()
@@ -70,18 +71,21 @@ export const process = (component, paymentArea, itemId, description) => {
                     placemodal.hide();
                 return showModal(wechatconfig.wechatform)
                     .then(() => {
-                        return Repository.getState(component, paymentArea, itemId, description)
-                            .then(westate => {
-                                if (westate.status) {
-                                    return Repository.createRedirectUrl(component, paymentArea, itemId)
-                                        .then(url => {
-                                            location.href = url;
-                                            // Return a promise that is never going to be resolved.
-                                            return new Promise(() => null);
-                                        });
-                                }
-                                return new Promise(() => null);
-                            });
+                        let max = 10;
+                        for(var i=0; i < max; i++) {
+                            Repository.getState(component, paymentArea, itemId, description)
+                                .then(westate => {
+                                    if (westate.status) {
+                                        return Repository.createRedirectUrl(component, paymentArea, itemId)
+                                            .then(url => {
+                                                location.href = url;
+                                                // Return a promise that is never going to be resolved.
+                                                return new Promise(() => null);
+                                            });
+                                    }
+                                });
+                        }
+                        return new Promise(() => null);
                     });
             });
         });
