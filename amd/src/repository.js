@@ -45,3 +45,42 @@ export const getForm = (component, paymentArea, itemId, description) => {
     };
     return Ajax.call([request])[0];
 };
+
+/**
+ * Checks to see if the order is processed.
+ *
+ * @param {string} component Name of the component that the itemId belongs to
+ * @param {string} paymentArea The area of the component that the itemId belongs to
+ * @param {number} itemId An internal identifier that is used by the component
+ * @param {string} description The description of the payment.
+ * @returns boolean
+ */
+export const getState = (component, paymentArea, itemId, description) => {
+    const request = {
+        methodname: 'paygw_wechat_get_status',
+        args: {
+            component,
+            paymentarea: paymentArea,
+            itemid: itemId,
+            description: description
+        },
+    };
+    // TODO - loop on ajax call until we get a succesful state and then redirect to course.
+    return Ajax.call([request])[0];
+};
+
+/**
+ * Return the payment url.
+ *
+ * @param {string} component Name of the component that the itemId belongs to
+ * @param {string} paymentArea The area of the component that the itemId belongs to
+ * @param {number} itemId An internal identifier that is used by the component
+ * @returns {string} payment url.
+ */
+export const createRedirectUrl = async(component, paymentArea, itemId) => {
+    const url = M.cfg.wwwroot + '/payment/gateway/wechat/redirect.php?' +
+        'component=' + component +
+        '&paymentarea=' + paymentArea +
+        '&itemid=' + itemId;
+    return url;
+};

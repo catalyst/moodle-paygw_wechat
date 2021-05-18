@@ -30,14 +30,26 @@ import * as Repository from './repository';
  * @param {string} wechatscript
  * @returns {Promise<Modal>}
  */
-const showModal = async(wechatscript) => {
+const showPlaceholderModal = async() => {
     const modal = await ModalFactory.create({
-        body: await Templates.render('paygw_wechat/wechat_button_placeholder', {"wechatscript": wechatscript})
+        body: await Templates.render('paygw_wechat/wechat_button_placeholder', {})
     });
     modal.show();
     return modal;
 };
 
+/**
+ * Creates and shows a modal that contains a placeholder.
+ * @param {string} wechatscript
+ * @returns {Promise<Modal>}
+ */
+const showModal = async(wechatscript) => {
+    const modal = await ModalFactory.create({
+        body: await Templates.render('paygw_wechat/wechat_button', {"wechatscript": wechatscript})
+    });
+    modal.show();
+    return modal;
+};
 
 /**
  * Process the payment.
@@ -49,12 +61,28 @@ const showModal = async(wechatscript) => {
  * @returns {Promise<string>}
  */
 export const process = (component, paymentArea, itemId, description) => {
-    /* eslint-disable */
     // This is a hack to get around linting. Promises are usually required to return
     // But we are hacking the process js to inject a redirect so need to wait for that to occur.
-    showModal('');
-    return Promise.all([Repository.getForm(component, paymentArea, itemId, description)])
-        .then(([wechatConfig]) => {
-            showModal(wechatConfig.wechatform);
+    return showPlaceholderModal()
+        .then(placemodal => {
+            return Repository.getForm(component, paymentArea, itemId, description)
+                .then(wechatconfig => {
+                    placemodal.hide();
+                return showModal(wechatconfig.wechatform)
+                    .then(() => {
+                        return Repository.getState(component, paymentArea, itemId, description)
+                            .then(westate => {
+                                if (westate.status) {
+                                    return Repository.createRedirectUrl(component, paymentArea, itemId)
+                                        .then(url => {
+                                            location.href = url;
+                                            // Return a promise that is never going to be resolved.
+                                            return new Promise(() => null);
+                                        });
+                                }
+                                return new Promise(() => null);
+                            });
+                    });
+            });
         });
 };

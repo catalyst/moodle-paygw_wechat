@@ -33,4 +33,12 @@ $functions = [
         'type'        => 'read',
         'ajax'        => true,
     ],
+    'paygw_wechat_get_status' => [
+        'classname'   => 'paygw_wechat\external\get_status',
+        'methodname'  => 'execute',
+        'classpath'   => '',
+        'description' => 'Check if order has been paid',
+        'type'        => 'read',
+        'ajax'        => true,
+    ],
 ];

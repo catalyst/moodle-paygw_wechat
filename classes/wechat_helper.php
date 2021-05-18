@@ -112,7 +112,7 @@ class wechat_helper {
 
         $input = new \WxPayUnifiedOrder();
         $input->SetBody($description);
-        $input->SetOut_trade_no($order->id.date("YmdHis"));
+        $input->SetOut_trade_no(self::get_orderid($order));
         $input->SetTotal_fee($cost);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 1200));
@@ -144,23 +144,24 @@ class wechat_helper {
      * @return boolean
      */
     public static function check_payment($config, $order) {
-        // TODO: check if payment processed already.
-        return false;
+        global $CFG;
+        require_once($CFG->dirroot."/payment/gateway/wechat/.extlib/wechatsdk/WxPay.Api.php");
+        require_once($CFG->dirroot."/payment/gateway/wechat/.extlib/WxPay.Config.php");
+
+        $input = new \WxPayOrderQuery();
+        $input->SetOut_trade_no(self::get_orderid($order));
 
         try {
-            $result = Factory::payment()->common()->query($order->id);
-            $responsechecker = new ResponseChecker();
-            if ($responsechecker->success($result)) {
-                if (!empty($result->tradeStatus) &&
-                    ($result->tradeStatus === 'TRADE_SUCCESS' || $result->tradeStatus === 'TRADE_FINISHED')) {
-                    return true;
-                } else {
-                    debugging("Call success, but invalid tradeStatus");
-                }
+            $wxconfig = new \WxPayConfig($config);
+            $orderquery = \WxPayApi::orderQuery($wxconfig, $input);
+            if ($orderquery['result_code'] == 'SUCCESS' && $orderquery['trade_state'] == 'SUCCESS') {
+                return true;
             }
-        } catch (Exception $e) {
-            debugging("Call failed, " . $e->getMessage());
+        } catch (\Exception $e) {
+            // TODO EXCEPTION;
+            return false;
         }
+
         return false;
     }
 
@@ -198,5 +199,15 @@ class wechat_helper {
             'success' => $success,
             'message' => $message,
         ];
+    }
+
+    /**
+     * Generate a unique order id based on timecreated and order->id field.
+     *
+     * @param \stdClass $order - the order record from paygw_alipay table.
+     * @return string
+     */
+    protected static function get_orderid($order) {
+        return $order->timecreated.'_'.$order->id;
     }
 }

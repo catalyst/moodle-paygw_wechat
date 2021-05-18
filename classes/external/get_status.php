@@ -35,11 +35,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * Class get_code
+ * Class get status
  * @copyright 2021 Catalyst IT
  * @package paygw_wechat
  */
-class get_code extends external_api {
+class get_status extends external_api {
 
     /**
      * Returns description of method parameters.
@@ -56,7 +56,7 @@ class get_code extends external_api {
     }
 
     /**
-     * Returns the wechat qr code.
+     * Checks to see if the user has paid.
      *
      * @param string $component
      * @param string $paymentarea
@@ -73,10 +73,7 @@ class get_code extends external_api {
         ]);
 
         $config = (object)helper::get_gateway_configuration($component, $paymentarea, $itemid, 'wechat');
-        $payable = helper::get_payable($component, $paymentarea, $itemid);
-        $surcharge = helper::get_gateway_surcharge('wechat');
 
-        $cost = helper::get_rounded_cost($payable->get_amount(), $payable->get_currency(), $surcharge);
         $order = wechat_helper::get_unprocessed_order($component, $paymentarea, $itemid);
 
         if ($order) {
@@ -84,19 +81,13 @@ class get_code extends external_api {
                 wechat_helper::process_payment($order);
                 // This order has already been paid - prevent them from paying again.
                 return [
-                    'wechatform' => \html_writer::div(get_string('paymentalreadyprocessed', 'paygw_wechat'))
+                    'status' => true
                 ];
             }
         }
 
-        if (empty($order)) {
-            // Create a new order.
-            $order = wechat_helper::create_order($component, $paymentarea, $itemid, $payable->get_account_id());
-        }
-        $script = wechat_helper::get_payment_script($config, $order, $description, $cost);
-
         return [
-            'wechatform' => $script
+            'status' => false
         ];
     }
 
@@ -107,7 +98,7 @@ class get_code extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'wechatform' => new external_value(PARAM_RAW, 'Wechat form for payment or error.'),
+            'status' => new external_value(PARAM_BOOL, 'Status of order'),
         ]);
     }
 }
