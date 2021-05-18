@@ -61,7 +61,7 @@ const showModal = async(wechatscript) => {
  * @returns {Promise<string>}
  */
 const getState = (component, paymentArea, itemId, description) => {
-    Repository.getState(component, paymentArea, itemId, description)
+    return Repository.getState(component, paymentArea, itemId, description)
         .then(westate => {
             if (westate.status) {
                 return Repository.createRedirectUrl(component, paymentArea, itemId)
@@ -98,12 +98,12 @@ export const process = (component, paymentArea, itemId, description) => {
                             for (var i = 0; i < max; i++) {
                                 setTimeout(function() {
                                     getState(component, paymentArea, itemId, description);
-                                },(i + i + 1) * 2500);
+                                }, (i + i + 1) * 3000);
                             }
                             // Hide Modal when timing out.
                             setTimeout(function() {
                                 modal.hide();
-                            },(max + max + 1) * 2500);
+                            }, (max + max + 1) * 3000);
                             return new Promise(() => null);
                         });
                 });

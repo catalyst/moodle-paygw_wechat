@@ -65,7 +65,6 @@ class get_status extends external_api {
      * @return string[]
      */
     public static function execute(string $component, string $paymentarea, int $itemid, string $description): array {
-        error_log("get_Status");
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
