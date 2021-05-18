@@ -52,6 +52,30 @@ const showModal = async(wechatscript) => {
 };
 
 /**
+ * Make Ajax call to get state, redirect if successful.
+ *
+ * @param {string} component
+ * @param {string} paymentArea
+ * @param {integer} itemId
+ * @param {string} description
+ * @returns {Promise<string>}
+ */
+const getState = (component, paymentArea, itemId, description) => {
+    Repository.getState(component, paymentArea, itemId, description)
+        .then(westate => {
+            if (westate.status) {
+                return Repository.createRedirectUrl(component, paymentArea, itemId)
+                    .then(url => {
+                        location.href = url;
+                        // Return a promise that is never going to be resolved.
+                        return new Promise(() => null);
+                    });
+            }
+            return new Promise(() => null);
+    });
+};
+
+/**
  * Process the payment.
  *
  * @param {string} component Name of the component that the itemId belongs to
@@ -61,29 +85,27 @@ const showModal = async(wechatscript) => {
  * @returns {Promise<string>}
  */
 export const process = (component, paymentArea, itemId, description) => {
+    // This is a hack to get around linting. Promises are usually required to return
+    // But we are hacking the process js to inject a redirect so need to wait for that to occur.
     return showPlaceholderModal()
         .then(placemodal => {
             return Repository.getForm(component, paymentArea, itemId, description)
                 .then(wechatconfig => {
                     placemodal.hide();
-                return showModal(wechatconfig.wechatform)
-                    .then(() => {
-                        let max = 10;
-                        for (var i = 0; i < max; i++) {
-                            Repository.getState(component, paymentArea, itemId, description)
-                                .then(westate => {
-                                    if (westate.status) {
-                                        return Repository.createRedirectUrl(component, paymentArea, itemId)
-                                            .then(url => {
-                                                location.href = url;
-                                                // Return a promise that is never going to be resolved.
-                                                return new Promise(() => null);
-                                            });
-                                    }
-                                });
-                        }
-                        return new Promise(() => null);
-                    });
-            });
+                    return showModal(wechatconfig.wechatform)
+                        .then((modal) => {
+                            let max = 20;
+                            for (var i = 0; i < max; i++) {
+                                setTimeout(function() {
+                                    getState(component, paymentArea, itemId, description);
+                                },(i + i + 1) * 2500);
+                            }
+                            // Hide Modal when timing out.
+                            setTimeout(function() {
+                                modal.hide();
+                            },(max + max + 1) * 2500);
+                            return new Promise(() => null);
+                        });
+                });
         });
 };
