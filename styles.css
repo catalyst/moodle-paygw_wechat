@@ -2,3 +2,13 @@
     height: 40px;
     width: auto;
 }
+
+.wechatpaymentmodal {
+    text-align: center;
+}
+
+.wechatpaymentmodal .wechatlogo .icon {
+    margin-top: 10px;
+    height: 40px;
+    width: auto;
+}
