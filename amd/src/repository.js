@@ -65,7 +65,7 @@ export const getState = (component, paymentArea, itemId, description) => {
             description: description
         },
     };
-    // TODO - loop on ajax call until we get a succesful state and then redirect to course.
+
     return Ajax.call([request])[0];
 };
 

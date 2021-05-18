@@ -61,9 +61,6 @@ const showModal = async(wechatscript) => {
  * @returns {Promise<string>}
  */
 export const process = (component, paymentArea, itemId, description) => {
-
-    // This is a hack to get around linting. Promises are usually required to return
-    // But we are hacking the process js to inject a redirect so need to wait for that to occur.
     return showPlaceholderModal()
         .then(placemodal => {
             return Repository.getForm(component, paymentArea, itemId, description)
@@ -72,7 +69,7 @@ export const process = (component, paymentArea, itemId, description) => {
                 return showModal(wechatconfig.wechatform)
                     .then(() => {
                         let max = 10;
-                        for(var i=0; i < max; i++) {
+                        for (var i=0; i < max; i++) {
                             Repository.getState(component, paymentArea, itemId, description)
                                 .then(westate => {
                                     if (westate.status) {
