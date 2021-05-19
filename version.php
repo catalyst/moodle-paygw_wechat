@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2021052503;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021052500;        // Requires this Moodle version.
+$plugin->requires  = 2020110900;        // Requires this Moodle version.
 $plugin->component = 'paygw_wechat';       // Full name of the plugin (used for diagnostics).
 $plugin->release = '1.0';
 $plugin->maturity = MATURITY_STABLE;
