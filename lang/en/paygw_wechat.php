@@ -42,3 +42,4 @@ $string['key'] = 'Key';
 $string['key_help'] = 'The key that wechat generated for your application.';
 $string['errorgeneratingcode'] = 'An error occurred when attempting to initiate the payment.';
 $string['sdknotinstalled'] = 'You cannot enable WeChat as the WeChat SDK is missing, please see the instructions in the plugin readme.';
+$string['paymentsuccessful'] = 'Your payment has been successfully processed';
