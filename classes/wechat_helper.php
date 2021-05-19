@@ -113,7 +113,7 @@ class wechat_helper {
         $input = new \WxPayUnifiedOrder();
         $input->SetBody($description);
         $input->SetOut_trade_no(self::get_orderid($order));
-        $input->SetTotal_fee($cost);
+        $input->SetTotal_fee($cost * 100); // WeChat works in hundredths and doesn't use decimals.
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 1200));
         $input->SetNotify_url($CFG->wwwroot.'/payment/gateway/wechat/process.php');
