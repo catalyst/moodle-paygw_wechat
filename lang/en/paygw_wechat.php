@@ -22,27 +22,16 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['amountmismatch'] = 'The amount you attempted to pay does not match the required fee. Your account has not been debited.';
-$string['authorising'] = 'Authorising the payment. Please wait...';
-$string['brandname'] = 'Brand name';
-$string['brandname_help'] = 'An optional label that overrides the business name for the wechat account on the WeChat site.';
-$string['cannotfetchorderdatails'] = 'Could not fetch payment details from wechat. Your account has not been debited.';
 $string['appid'] = 'App ID';
 $string['appid_help'] = 'The app ID that WeChat generated for your application.';
 $string['merchantid'] = 'Merchant ID';
 $string['merchantid_help'] = 'The Merchant ID that WeChat generated for your account.';
-$string['environment'] = 'Environment';
-$string['environment_help'] = 'You can set this to Sandbox if you are using sandbox accounts (for testing purpose only).';
 $string['gatewaydescription'] = 'Pay using WeChat.';
 $string['gatewayname'] = 'WeChat';
 $string['internalerror'] = 'An internal error has occurred. Please contact us.';
-$string['live'] = 'Live';
-$string['paymentnotcleared'] = 'payment not cleared by wechat.';
 $string['pluginname'] = 'WeChat';
 $string['pluginname_desc'] = 'The wechat plugin allows you to receive payments via WeChat.';
 $string['privacy:metadata'] = 'The wechat plugin does not store any personal data.';
-$string['repeatedorder'] = 'This order has already been processed earlier.';
-$string['sandbox'] = 'Sandbox';
 $string['secret'] = 'Application secret';
 $string['secret_help'] = 'The application secret that wechat generated.';
 $string['key'] = 'Key';
