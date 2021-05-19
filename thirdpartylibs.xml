@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <libraries>
   <library>
-    <location>.extlib/wechatsdk</location>
+    <location>.extlib</location>
     <name>Wechat SDK</name>
     <version>3.0.10</version>
     <license>?</license>
