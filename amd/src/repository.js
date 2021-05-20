@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * PayPal repository module to encapsulate all of the AJAX requests that can be sent for wechat.
+ * Repository module to encapsulate all of the AJAX requests that can be sent for wechat.
  *
  * @module     paygw_wechat/repository
  * @package    paygw_wechat
