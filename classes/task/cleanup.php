@@ -58,7 +58,8 @@ class cleanup extends \core\task\scheduled_task {
             [wechat_helper::ORDER_STATUS_PENDING, (time() - (HOURSECS))]);
         foreach ($orders as $order) {
             try {
-                $config = (object)helper::get_gateway_configuration($order->component, $order->paymentarea, $order->itemid, 'wechat');
+                $config = (object)helper::get_gateway_configuration($order->component, $order->paymentarea,
+                                                                    $order->itemid, 'wechat');
             } catch (\dml_exception $e) {
                 // This payment method doesn't exist - delete the order - happens when enrol fee is removed from a course.
                 $DB->delete_records('paygw_wechat', ['id' => $order->id]);
