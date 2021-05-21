@@ -123,10 +123,13 @@ class wechat_helper {
         try {
             $wxconfig = new \WxPayConfig($config);
             $result = \WxPayApi::unifiedOrder($wxconfig, $input);
-
-            $qrcode = new \core_qrcode($result["code_url"]);
-            $imagedata = 'data:image/png;base64,' . base64_encode($qrcode->getBarcodePngData(6, 6));
-            return html_writer::img($imagedata, '');
+            if (!empty($result["code_url"])) {
+                $qrcode = new \core_qrcode($result["code_url"]);
+                $imagedata = 'data:image/png;base64,' . base64_encode($qrcode->getBarcodePngData(6, 6));
+                return html_writer::img($imagedata, '');
+            } else {
+                return get_string('errorgeneratingcode', 'paygw_wechat');
+            }
         } catch (\Exception $e) {
             // TODO EXCEPTION.
             return get_string('errorgeneratingcode', 'paygw_wechat');
